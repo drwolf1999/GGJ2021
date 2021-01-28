@@ -81,16 +81,23 @@ public class MapLoader : MonoBehaviour
 				{
 					obj = floor;
 				}
+				/*else if (r == 0 || r == row - 1 || c == 0 || c == col - 1)
+				{
+					obj = null;
+				}*/
 				else
 				{
 					obj = floor;
 				}
-				instance = Instantiate(obj, position + new Vector2(c, row - 1 - r), Quaternion.identity);
-				if (startOrEndOrNo > 0) // DEBUG
+				if (obj)
 				{
-					instance.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
+					instance = Instantiate(obj, position + new Vector2(c, row - 1 - r), Quaternion.identity);
+					if (startOrEndOrNo > 0) // DEBUG
+					{
+						instance.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
+					}
+					instance.transform.parent = mapParent;
 				}
-				instance.transform.parent = mapParent;
 			}
 		}
 	}
