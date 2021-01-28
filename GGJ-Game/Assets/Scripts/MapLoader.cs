@@ -11,6 +11,7 @@ public class MapLoader : MonoBehaviour
 	[SerializeField] private GameObject door;
 	[SerializeField] private GameObject wall;
 	[SerializeField] private GameObject floor;
+	private RoomDesign roomDesign;
 
 	private class DIR
 	{
@@ -38,6 +39,7 @@ public class MapLoader : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		roomDesign = GetComponent<RoomDesign>();
 		GenerateStage(4, 4);
 	}
 
@@ -59,7 +61,7 @@ public class MapLoader : MonoBehaviour
 	/// <param name="col">col size</param>
 	/// <param name="position">pivot position</param>
 	/// <param name="type">Room type bit (up, right, down, left)</param>
-	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo)
+	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room)
 	{
 		GameObject obj, instance;
 		for (int r = 0; r < row; r++)
@@ -96,7 +98,7 @@ public class MapLoader : MonoBehaviour
 					{
 						instance.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
 					}
-					instance.transform.parent = mapParent;
+					instance.transform.parent = room.transform;
 				}
 			}
 		}
@@ -123,13 +125,18 @@ public class MapLoader : MonoBehaviour
 				Debug.Log(s);
 				/// END DEBUG*/
 		int roomRow = 16, roomCol = 16;
+		GameObject room;
 		for (int r = 0; r < row; r++)
 		{
 			for (int c = 0; c < col; c++)
 			{
 				Vector2 v = new Vector2(r, c);
-				/*Debug.Log(r + ", " + c + " " + new Vector2(roomCol * c, roomRow * (row - 1 - r)) + " " + shape[r, c]);*/
-				GenerateRoom(roomRow, roomCol, new Vector2(roomCol * c, roomRow * (row - 1 - r)), shape[r, c], (v == start ? 1 : v == end ? 2 : 0));
+				room = new GameObject();
+				room.transform.parent = mapParent;
+				room.name = "room_" + r + "_" + c;
+				Vector2 spawnPosition = new Vector2(roomCol * c, roomRow * (row - 1 - r));
+				GenerateRoom(roomRow, roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room);
+				roomDesign.SpawnEnemy(roomRow, roomCol, spawnPosition);
 			}
 		}
 	}
