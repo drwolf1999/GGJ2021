@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletMove : MonoBehaviour
+public class BulletMove : MonoBehaviour, IPooledObject
 {
     private Rigidbody2D rigid;
 
@@ -14,13 +14,13 @@ public class BulletMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
-    private void OnEnable()
+    public void OnObjectSpawn()
     {
         rigid.AddForce(transform.up * speed, ForceMode2D.Impulse);
     }
-    // Update is called once per frame
-    void Update()
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        gameObject.SetActive(false);
     }
 }

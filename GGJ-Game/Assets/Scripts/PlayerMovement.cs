@@ -8,20 +8,25 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private Vector2 target, mouse;
     private float angle;
-    private int time=0;
-    private bool shooting = false;
 
     public float speed;
     public float attackSpeed;
-    
 
-    // Start is called before the first frame update
+    Combat playerCombat;
+    private float waitingTime;
+    private bool isShootable = true;
+
+    ObjectPooler objectPooler;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        playerCombat = GetComponent<Combat>();
+        waitingTime = 1.0f / (float)playerCombat.AttackSpeed;
+
+        objectPooler = ObjectPooler.Instance;
     }
 
-    // Update is called once per frame
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -32,10 +37,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        time++;
-        if (time % 60 == 0)
-            time = 0;
-
         rigid.MovePosition(rigid.position + movement * speed * Time.fixedDeltaTime);
         Shoot();
     }
@@ -50,15 +51,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Shoot()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && isShootable)
         {
-            if((time * attackSpeed) % 30 ==0 && !shooting)
-            {
-                var bullet = ObjectPool.GetObject();
-
-                bullet.transform.position = transform.position;
-            }
-            
+            objectPooler.SpawnFromPool("PlayerBullet", transform.position, Quaternion.identity);
+            isShootable = false;
+            WaitForShoot();
         }
+    }
+
+    IEnumerator WaitForShoot()
+    {
+        yield return new WaitForSeconds(waitingTime);
+        isShootable = true;
     }
 }
