@@ -11,8 +11,8 @@ public class PlayerCombat : Combat
         Defense = 0;
         MovementSpeed = 7;
         AttackSpeed = 1;
-        CriticalRate = 0;
-        CriticalDamage = 0;
+        CriticalRate = 50;
+        CriticalDamage = 70;
         Penetration = 0;
     }
     protected override void Die()

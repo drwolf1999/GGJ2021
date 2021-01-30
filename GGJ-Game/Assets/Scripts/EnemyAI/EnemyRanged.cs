@@ -6,17 +6,20 @@ public class EnemyRanged : MonoBehaviour
 {
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform shootPos;
+    [SerializeField] Rigidbody2D rb;
 
     public bool isAwaken = false;
 
-    public float speed = 1.5f;
-    public float rotateSpeed = 5.0f;
     public string bulletTag = "";
     
-    private Vector2 newPosition;
 
     private float timer;
     private float waitingTime;
+
+    public float accelerationTime = 2f;
+    public float maxSpeed = 7f;
+    private Vector2 movement;
+    private float moveTimeLeft;
 
     ObjectPooler objectPooler;
 
@@ -25,7 +28,6 @@ public class EnemyRanged : MonoBehaviour
     void Start()
     {
         isAwaken = false;
-        ChangePosition();
 
         timer = 0.0f;
         waitingTime = 2.0f;
@@ -39,12 +41,7 @@ public class EnemyRanged : MonoBehaviour
     {
         if(isAwaken)
         {
-            if(Vector2.Distance(transform.position, newPosition) < 1)
-            {
-                ChangePosition();
-            }
-            transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * speed);
-            LookAtPlayer();
+            //LookAtPlayer();
             timer += Time.deltaTime;
             if (timer > waitingTime)
             {
@@ -52,12 +49,23 @@ public class EnemyRanged : MonoBehaviour
                 Attack();
                 timer = 0.0f;
             }
+
+            moveTimeLeft -= Time.deltaTime;
+            if(moveTimeLeft <= 0)
+            {
+                movement = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                moveTimeLeft = accelerationTime;
+            }
         }
     }
 
-    private void ChangePosition()
+    private void FixedUpdate()
     {
-        newPosition = new Vector2(Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f));
+        if (isAwaken)
+        {
+            //rb.AddForce(movement * maxSpeed);
+            rb.velocity = movement * maxSpeed;
+        }
     }
 
     private void Attack()
@@ -70,7 +78,13 @@ public class EnemyRanged : MonoBehaviour
 
     private void LookAtPlayer()
     {
-        transform.up = playerTransform.position - transform.position;
+        //transform.up = playerTransform.position - transform.position;
+
+        //transform.LookAt(playerTransform.position);
+
+        Vector2 relativePos = playerTransform.position - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(relativePos, Vector2.up);
+        transform.rotation = rotation;
     }
 
     public void AwakeEnemy()
