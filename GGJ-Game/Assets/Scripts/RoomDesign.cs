@@ -5,11 +5,11 @@ using UnityEngine;
 public class RoomDesign : MonoBehaviour
 {
     [SerializeField] private GameObject enemy;
-	[SerializeField] private Transform enemyParent;
+	private StageController stageController;
 
 	private void Start()
 	{
-		//
+		stageController = GetComponent<StageController>();
 	}
 
 	private void Update()
@@ -26,7 +26,7 @@ public class RoomDesign : MonoBehaviour
 				if (MethodsForMap.IsWall(r, c, row, col)) continue;
 				if (Random.Range(1, 13 * 13) > 4) continue;
 				GameObject e = Instantiate(enemy, position + new Vector2(c, row - 1 - r), Quaternion.identity);
-				e.transform.parent = enemyParent;
+				e.transform.parent = stageController.enemyParent;
 			}
 		}
 	}

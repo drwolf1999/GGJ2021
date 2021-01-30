@@ -8,4 +8,11 @@ public class MethodsForMap
 	{
 		return r == 0 || r == row - 1 || c == 0 || c == col - 1;
 	}
+
+	public static int Clamp(int x, int min, int max)
+	{
+		if (x < min) return min;
+		if (max < x) return max;
+		return x;
+	}
 }

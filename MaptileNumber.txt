@@ -1,0 +1,2 @@
+16 a 13 b 17 c 9 d 36 e 38 f 11 g 37h 39 i 46 j 47 k 53 l 54 n 1 m 3 o 5 p 51 q 56 r 57 s 58 t 59 u
+18 v 4 w 19 x 62 y 63 z 60 A 20 B 29 C 33 D 30 E 21 F 6 G 7 H 8 I 10 J 12 K 14L

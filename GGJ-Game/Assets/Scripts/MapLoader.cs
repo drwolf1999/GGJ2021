@@ -6,12 +6,11 @@ using System.Linq;
 public class MapLoader : MonoBehaviour
 {
 	private Vector2Int start, end;
-
-	[SerializeField] private Transform mapParent;
-	[SerializeField] private GameObject door;
-	[SerializeField] private GameObject wall;
-	[SerializeField] private GameObject floor;
 	private RoomDesign roomDesign;
+	private StageController stageController;
+	private Minimap minimap;
+	private Dictionary<char, GameObject> tileMap;
+	private List<string[]> roomTypes;
 
 	private class DIR
 	{
@@ -39,8 +38,12 @@ public class MapLoader : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		ReadResources();
+		stageController = GetComponent<StageController>();
 		roomDesign = GetComponent<RoomDesign>();
-		GenerateStage(4, 4);
+		minimap = GameObject.Find("Minimap").GetComponent<Minimap>();
+/*		GenerateStage(stageController.mapRow, stageController.mapCol);*/
+		minimap.GenerateMinimap();
 	}
 
 	// Update is called once per frame
@@ -61,7 +64,7 @@ public class MapLoader : MonoBehaviour
 	/// <param name="col">col size</param>
 	/// <param name="position">pivot position</param>
 	/// <param name="type">Room type bit (up, right, down, left)</param>
-	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room)
+	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType)
 	{
 		GameObject obj, instance;
 		for (int r = 0; r < row; r++)
@@ -73,23 +76,23 @@ public class MapLoader : MonoBehaviour
 					((type & (1 << DIR.DOWN)) > 0 && r == row - 1 && IsCenter(c, col)) ||
 					((type & (1 << DIR.LEFT)) > 0 && IsCenter(r, row) && c == 0))
 				{
-					obj = door;
+					obj = null;
 				}
-				else if (r == 0 || r == row - 1 || c == 0 || c == col - 1)
+				/*else if (r == 0 || r == row - 1 || c == 0 || c == col - 1)
 				{
 					obj = wall;
 				}
 				else if (startOrEndOrNo != 0 && r == (row - 1) / 2 && c == (col - 1) / 2)
 				{
 					obj = floor;
-				}
+				}*/
 				/*else if (r == 0 || r == row - 1 || c == 0 || c == col - 1)
 				{
 					obj = null;
 				}*/
 				else
 				{
-					obj = floor;
+					obj = tileMap[roomType[r][c]];
 				}
 				if (obj)
 				{
@@ -124,7 +127,6 @@ public class MapLoader : MonoBehaviour
 				}
 				Debug.Log(s);
 				/// END DEBUG*/
-		int roomRow = 16, roomCol = 16;
 		GameObject room;
 		for (int r = 0; r < row; r++)
 		{
@@ -132,11 +134,11 @@ public class MapLoader : MonoBehaviour
 			{
 				Vector2 v = new Vector2(r, c);
 				room = new GameObject();
-				room.transform.parent = mapParent;
+				room.transform.parent = stageController.mapParent;
 				room.name = "room_" + r + "_" + c;
-				Vector2 spawnPosition = new Vector2(roomCol * c, roomRow * (row - 1 - r));
-				GenerateRoom(roomRow, roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room);
-				roomDesign.SpawnEnemy(roomRow, roomCol, spawnPosition);
+				Vector2 spawnPosition = new Vector2(stageController.roomCol * c, stageController.roomRow * (row - 1 - r));
+				GenerateRoom(stageController.roomRow, stageController.roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room, roomTypes[Random.Range(0, roomTypes.Count - 1)]);
+				roomDesign.SpawnEnemy(stageController.roomRow, stageController.roomCol, spawnPosition);
 			}
 		}
 	}
@@ -263,6 +265,25 @@ public class MapLoader : MonoBehaviour
 			ret[nr, nc] |= 1 << DIR.reverse(dir[i]);
 			if (isRet) return;
 			FillDFS(nr, nc, row, col, ref ret);
+		}
+	}
+
+	private void ReadResources()
+	{
+		tileMap = new Dictionary<char, GameObject>();
+		// Read Tiles
+		GameObject[] gameObjects = Resources.LoadAll<GameObject>("Prefabs/Tiles");
+		foreach (GameObject gameObject in gameObjects)
+		{
+			tileMap[gameObject.name[0]] = gameObject;
+		}
+
+		// Read Rooms
+		roomTypes = new List<string[]>();
+		TextAsset[] txts = Resources.LoadAll<TextAsset>("Prefabs/Rooms");
+		foreach (TextAsset txt in txts)
+		{
+			roomTypes.Add(txt.text.Split('\n'));
 		}
 	}
 }
