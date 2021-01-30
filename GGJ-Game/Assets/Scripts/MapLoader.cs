@@ -10,6 +10,9 @@ public class MapLoader : MonoBehaviour
 	private Minimap minimap;
 	private Dictionary<char, GameObject> tileMap;
 	private List<string[]> roomTypes;
+	private GameObject player;
+
+	[SerializeField] private GameObject door;
 
 	private class DIR
 	{
@@ -37,6 +40,7 @@ public class MapLoader : MonoBehaviour
 	private void Awake()
 	{
 		ReadResources();
+		player = GameObject.Find("Player");
 		roomDesign = GetComponent<RoomDesign>();
 		minimap = GameObject.Find("Minimap").GetComponent<Minimap>();
 	}
@@ -44,7 +48,7 @@ public class MapLoader : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-/*		GenerateStage(stageController.mapRow, stageController.mapCol);*/
+		/*		GenerateStage(stageController.mapRow, stageController.mapCol);*/
 		minimap.GenerateMinimap();
 	}
 
@@ -68,16 +72,26 @@ public class MapLoader : MonoBehaviour
 	/// <param name="type">Room type bit (up, right, down, left)</param>
 	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType)
 	{
-
+		Vector3 doorScale = new Vector3(0.44f, 0.22f, 1f);
 		/// ln : 상하 통로
 		GameObject obj, instance;
 		for (int r = 0; r < row; r++)
 		{
 			for (int c = 0; c < col; c++)
 			{
+				Vector3 scale = Vector3.one;
+				Vector3 rotation = Vector3.zero;
+				Vector3 spawnPosition = position + new Vector2(c, row - 1 - r);
 				if (((type & (1 << DIR.UP)) > 0 && (0 <= r && r <= 2) && IsCenter(c, col)))
 				{
-					if (c == col / 2 - 1)
+					if (r == 0)
+					{
+						if (c == col / 2) continue;
+						obj = door;
+						spawnPosition.x += 0.5f;
+						scale = doorScale;
+					}
+					else if (c == col / 2 - 1)
 					{
 						obj = tileMap['l'];
 					}
@@ -90,11 +104,29 @@ public class MapLoader : MonoBehaviour
 						obj = tileMap[roomType[r][c]];
 					}
 				}
-				else if (((type & (1 << DIR.RIGHT)) > 0 && IsCenter(r, row) && c == col - 1) ||
-					((type & (1 << DIR.DOWN)) > 0 && r == row - 1 && IsCenter(c, col)) ||
-					((type & (1 << DIR.LEFT)) > 0 && IsCenter(r, row) && c == 0))
+				else if (((type & (1 << DIR.RIGHT)) > 0 && IsCenter(r, row) && c == col - 1))
 				{
-					obj = null;
+					if (r == row / 2) continue;
+					obj = door;
+					rotation.z -= 90f;
+					spawnPosition.y -= 0.5f;
+					scale = doorScale;
+				}
+				else if ((type & (1 << DIR.DOWN)) > 0 && r == row - 1 && IsCenter(c, col))
+				{
+					if (c == col / 2) continue;
+					obj = door;
+					rotation.z -= 2 * 90f;
+					spawnPosition.x += 0.5f;
+					scale = doorScale;
+				}
+				else if ((type & (1 << DIR.LEFT)) > 0 && IsCenter(r, row) && c == 0)
+				{
+					if (r == row / 2) continue;
+					obj = door;
+					rotation.z -= 3 * 90f;
+					spawnPosition.y -= 0.5f;
+					scale = doorScale;
 				}
 				/*else if (r == 0 || r == row - 1 || c == 0 || c == col - 1)
 				{
@@ -122,12 +154,17 @@ public class MapLoader : MonoBehaviour
 				}
 				if (obj)
 				{
-					instance = Instantiate(obj, position + new Vector2(c, row - 1 - r), Quaternion.identity);
-					if (startOrEndOrNo > 0) // DEBUG
-					{
-						instance.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
-					}
+					instance = Instantiate(obj, spawnPosition, Quaternion.identity);
 					instance.transform.parent = room.transform;
+					instance.transform.Rotate(rotation);
+					instance.transform.localScale = scale;
+					if (startOrEndOrNo == 1) // start position
+					{
+						if (!instance.CompareTag("Obstacle") && obj != door)
+						{
+							player.transform.position = spawnPosition;
+						}
+					}
 				}
 			}
 		}
