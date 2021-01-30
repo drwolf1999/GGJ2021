@@ -13,14 +13,17 @@ public class StageController : MonoBehaviour
 
 	[SerializeField] private UnityEngine.UI.Button debugBTN; // go nextStage
 
-	// Start is called before the first frame update
-	void Start()
+	private void Awake()
 	{
 		mapLoader = this.GetComponent<MapLoader>();
 
-		GoNextStage();
-
 		debugBTN.onClick.AddListener(GoNextStage);
+	}
+
+	// Start is called before the first frame update
+	void Start()
+	{
+		GoNextStage();
 	}
 
 	// Update is called once per frame
@@ -34,6 +37,6 @@ public class StageController : MonoBehaviour
 		foreach (Transform transform in mapParent) Destroy(transform.gameObject);
 		foreach (Transform transform in enemyParent) Destroy(transform.gameObject);
 		currentStage++;
-		mapLoader.GenerateStage(mapRow, mapCol);
+		mapLoader.GenerateStage(mapRow, mapCol, this);
 	}
 }

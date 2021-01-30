@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RoomDesign : MonoBehaviour
 {
-    [SerializeField] private GameObject enemy;
+    /*[SerializeField] private GameObject enemy;*/
 	private StageController stageController;
 
-	private void Start()
+	private void Awake()
 	{
 		stageController = GetComponent<StageController>();
 	}
@@ -19,7 +19,7 @@ public class RoomDesign : MonoBehaviour
 
 	public void SpawnEnemy(int row, int col, Vector2 position)
 	{
-		for (int r = 0; r < row; r++)
+		/*for (int r = 0; r < row; r++)
 		{
 			for (int c = 0; c < col; c++)
 			{
@@ -28,6 +28,6 @@ public class RoomDesign : MonoBehaviour
 				GameObject e = Instantiate(enemy, position + new Vector2(c, row - 1 - r), Quaternion.identity);
 				e.transform.parent = stageController.enemyParent;
 			}
-		}
+		}*/
 	}
 }

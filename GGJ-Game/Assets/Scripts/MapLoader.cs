@@ -7,7 +7,6 @@ public class MapLoader : MonoBehaviour
 {
 	private Vector2Int start, end;
 	private RoomDesign roomDesign;
-	private StageController stageController;
 	private Minimap minimap;
 	private Dictionary<char, GameObject> tileMap;
 	private List<string[]> roomTypes;
@@ -35,13 +34,16 @@ public class MapLoader : MonoBehaviour
 		}
 	}
 
+	private void Awake()
+	{
+		ReadResources();
+		roomDesign = GetComponent<RoomDesign>();
+		minimap = GameObject.Find("Minimap").GetComponent<Minimap>();
+	}
+
 	// Start is called before the first frame update
 	void Start()
 	{
-		ReadResources();
-		stageController = GetComponent<StageController>();
-		roomDesign = GetComponent<RoomDesign>();
-		minimap = GameObject.Find("Minimap").GetComponent<Minimap>();
 /*		GenerateStage(stageController.mapRow, stageController.mapCol);*/
 		minimap.GenerateMinimap();
 	}
@@ -112,7 +114,7 @@ public class MapLoader : MonoBehaviour
 	/// </summary>
 	/// <param name="row">row size</param>
 	/// <param name="col">col size</param>
-	public void GenerateStage(int row, int col)
+	public void GenerateStage(int row, int col, StageController stageController)
 	{
 		int[,] shape = GenerateShape(row, col);
 		/*		/// DEBUG
