@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Obstacle
+  - EnemyMelee
+  - PlayerBullet
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
@@ -17,10 +20,10 @@ TagManager:
   - 
   - Bounds
   - Obstacle
-  - 
-  - 
-  - 
-  - 
+  - PlayerBullet
+  - EnemyBullet
+  - Player
+  - Enemy
   - 
   - 
   - 

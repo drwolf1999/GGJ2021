@@ -7,13 +7,13 @@ public class PlayerCombat : Combat
     private void Start()
     {
         Health = 100;
-        Attack = 100;
-        Defense = 100;
-        MovementSpeed = 100;
-        AttackSpeed = 100;
-        CriticalRate = 100;
-        CriticalDamage = 100;
-        Penetration = 100;
+        Attack = 18;
+        Defense = 0;
+        MovementSpeed = 7;
+        AttackSpeed = 1;
+        CriticalRate = 0;
+        CriticalDamage = 0;
+        Penetration = 0;
     }
     protected override void Die()
     {
@@ -25,7 +25,8 @@ public class PlayerCombat : Combat
         string tag = collision.gameObject.tag;
         if(tag == "EnemyBullet")
         {
-            Combat enemyCombat = collision.gameObject.GetComponentInParent(typeof(Combat)) as Combat;
+            //Combat enemyCombat = collision.gameObject.GetComponentInParent(typeof(Combat)) as Combat;
+            Combat enemyCombat = collision.gameObject.GetComponent<EnemyBulletMove>().GetCombatStats();
             GetDamage(enemyCombat);
         }
     }

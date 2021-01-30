@@ -20,6 +20,8 @@ public class EnemyRanged : MonoBehaviour
 
     ObjectPooler objectPooler;
 
+    [SerializeField] Combat enemyCombat;
+
     void Start()
     {
         isAwaken = false;
@@ -29,6 +31,8 @@ public class EnemyRanged : MonoBehaviour
         waitingTime = 2.0f;
 
         objectPooler = ObjectPooler.Instance;
+
+        //enemyCombat = gameObject.GetComponent<Combat>();
     }
 
     void Update()
@@ -41,10 +45,10 @@ public class EnemyRanged : MonoBehaviour
             }
             transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * speed);
             LookAtPlayer();
-
             timer += Time.deltaTime;
             if (timer > waitingTime)
             {
+                Debug.Log(Time.time);
                 Attack();
                 timer = 0.0f;
             }
@@ -58,14 +62,15 @@ public class EnemyRanged : MonoBehaviour
 
     private void Attack()
     {
-        objectPooler.SpawnFromPool(bulletTag, shootPos.position, Quaternion.identity);
+        GameObject bullet = objectPooler.SpawnFromPool(bulletTag, shootPos.position, shootPos.rotation);
+        bullet.GetComponent<EnemyBulletMove>().SetCombatStats(enemyCombat);
 
         //Put Animation
     }
 
     private void LookAtPlayer()
     {
-        transform.right = playerTransform.position - transform.position;
+        transform.up = playerTransform.position - transform.position;
     }
 
     public void AwakeEnemy()

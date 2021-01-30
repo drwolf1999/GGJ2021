@@ -10,35 +10,54 @@ public class PlayerMovement : MonoBehaviour
     private float angle;
 
     public float speed;
-    public float attackSpeed;
 
-    Combat playerCombat;
-    private float waitingTime;
+    [SerializeField] Combat playerCombat;
+    private float waitingTime = 1.0f;
     private bool isShootable = true;
+    public Transform firePoint;
 
     ObjectPooler objectPooler;
 
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-        playerCombat = GetComponent<Combat>();
-        waitingTime = 1.0f / (float)playerCombat.AttackSpeed;
-
+        //playerCombat = GetComponent<Combat>();
         objectPooler = ObjectPooler.Instance;
+        ApplyPlayerStats();
+    }
+
+    public void ApplyPlayerStats()
+    {
+        if (playerCombat.AttackSpeed <= 0.0f)
+        {
+            waitingTime = 1.0f;
+        }
+        else
+        {
+            waitingTime = 1.0f / (float)playerCombat.AttackSpeed;
+        }
+
+        if (playerCombat.MovementSpeed <= 0.0f)
+        {
+            speed = 7.0f;
+        }
+        else
+        {
+            speed = playerCombat.MovementSpeed;
+        }
     }
 
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-
         PlayerLook();
+        Shoot();
     }
 
     private void FixedUpdate()
     {
         rigid.MovePosition(rigid.position + movement * speed * Time.fixedDeltaTime);
-        Shoot();
     }
 
     void PlayerLook()
@@ -53,9 +72,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space) && isShootable)
         {
-            objectPooler.SpawnFromPool("PlayerBullet", transform.position, Quaternion.identity);
+            GameObject bullet = objectPooler.SpawnFromPool("PlayerBullet", firePoint.position, firePoint.rotation);
+            bullet.GetComponent<BulletMove>().SetCombatStats(playerCombat);
             isShootable = false;
-            WaitForShoot();
+            StartCoroutine("WaitForShoot");
         }
     }
 
@@ -63,5 +83,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(waitingTime);
         isShootable = true;
+        //Debug.Log(isShootable);
     }
 }
