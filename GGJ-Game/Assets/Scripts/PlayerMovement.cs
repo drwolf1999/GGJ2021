@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Shoot()
     {
-        if (Input.GetKey(KeyCode.Space) && isShootable)
+        if (Input.GetKey(KeyCode.Mouse0) && isShootable)
         {
             GameObject bullet = objectPooler.SpawnFromPool("PlayerBullet", firePoint.position, firePoint.rotation);
             bullet.GetComponent<BulletMove>().SetCombatStats(playerCombat);
