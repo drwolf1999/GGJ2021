@@ -783,8 +783,9 @@ MonoBehaviour:
   playerTransform: {fileID: 194108958}
   shootPos: {fileID: 917440117}
   rb: {fileID: 342544142}
-  isAwaken: 0
+  isAwaken: 1
   bulletTag: EnemyBullet
+  rotateSpeed: 10
   accelerationTime: 2
   maxSpeed: 4
   enemyCombat: {fileID: 342544140}
