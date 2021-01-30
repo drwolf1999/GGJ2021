@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
 
     [SerializeField] Combat playerCombat;
+    [SerializeField] SoundManager soundManager;
+    public string atkName;
+
     private float waitingTime = 1.0f;
     private bool isShootable = true;
     public Transform firePoint;
@@ -83,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0) && isShootable)
         {
+            soundManager.playSoundEffect(atkName);
             GameObject bullet = objectPooler.SpawnFromPool("PlayerBullet", firePoint.position, firePoint.rotation);
             bullet.GetComponent<BulletMove>().SetCombatStats(playerCombat);
             isShootable = false;
