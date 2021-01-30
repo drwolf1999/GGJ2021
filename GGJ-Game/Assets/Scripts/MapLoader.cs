@@ -68,13 +68,29 @@ public class MapLoader : MonoBehaviour
 	/// <param name="type">Room type bit (up, right, down, left)</param>
 	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType)
 	{
+
+		/// ln : 상하 통로
 		GameObject obj, instance;
 		for (int r = 0; r < row; r++)
 		{
 			for (int c = 0; c < col; c++)
 			{
-				if (((type & (1 << DIR.UP)) > 0 && r == 0 && IsCenter(c, col)) ||
-					((type & (1 << DIR.RIGHT)) > 0 && IsCenter(r, row) && c == col - 1) ||
+				if (((type & (1 << DIR.UP)) > 0 && (0 <= r && r <= 2) && IsCenter(c, col)))
+				{
+					if (c == col / 2 - 1)
+					{
+						obj = tileMap['l'];
+					}
+					else if (c == col / 2)
+					{
+						obj = tileMap['n'];
+					}
+					else
+					{
+						obj = tileMap[roomType[r][c]];
+					}
+				}
+				else if (((type & (1 << DIR.RIGHT)) > 0 && IsCenter(r, row) && c == col - 1) ||
 					((type & (1 << DIR.DOWN)) > 0 && r == row - 1 && IsCenter(c, col)) ||
 					((type & (1 << DIR.LEFT)) > 0 && IsCenter(r, row) && c == 0))
 				{
@@ -94,7 +110,15 @@ public class MapLoader : MonoBehaviour
 				}*/
 				else
 				{
-					obj = tileMap[roomType[r][c]];
+					if (tileMap.ContainsKey(roomType[r][c]))
+					{
+						obj = tileMap[roomType[r][c]];
+					}
+					else
+					{
+						Debug.Log(roomType[r][c]);
+						obj = null;
+					}
 				}
 				if (obj)
 				{
@@ -143,6 +167,8 @@ public class MapLoader : MonoBehaviour
 				roomDesign.SpawnEnemy(stageController.roomRow, stageController.roomCol, spawnPosition);
 			}
 		}
+		// A*
+		AstarPath.active.Scan();
 	}
 
 	private int[,] GenerateShape(int row, int col)

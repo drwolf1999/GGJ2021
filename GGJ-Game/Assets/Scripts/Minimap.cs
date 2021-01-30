@@ -9,11 +9,13 @@ public class Minimap : MonoBehaviour
 
 	private GameObject player;
 	[SerializeField] private StageController stageController;
+	private GameObject cameraBound;
 	private Vector2Int lastPlayerPosition;
 
 	// Start is called before the first frame update
-	void Start()
+	void Awake()
 	{
+		cameraBound = GameObject.Find("CameraBound");
 		player = GameObject.Find("Player");
 		lastPlayerPosition = new Vector2Int(-100, -100);
 	}
@@ -45,8 +47,9 @@ public class Minimap : MonoBehaviour
 			transform.Find(GetTileName(lastPlayerPosition.x, lastPlayerPosition.y)).GetComponent<Image>().color = Color.red;
 		}
 		// update current location
-		Debug.Log(transform);
 		transform.Find(GetTileName(playerPosition.x, playerPosition.y)).GetComponent<Image>().color = Color.blue;
+		Debug.Log(playerPosition);
+		cameraBound.transform.position = new Vector2(playerPosition.y * roomCol, (mapRow - 1 - playerPosition.x) * roomRow);
 		// end
 		lastPlayerPosition = playerPosition;
 	}
