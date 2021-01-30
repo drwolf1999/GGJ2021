@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletMove : MonoBehaviour, IPooledObject
+public class EnemyBulletMove : MonoBehaviour, IPooledObject
 {
-    //private Rigidbody2D rigid;
     [SerializeField] Rigidbody2D rigid;
 
     public float speed;
-    private Combat combat;
+
+    // Start is called before the first frame update
 
     public void OnObjectSpawn()
     {
@@ -17,8 +17,13 @@ public class BulletMove : MonoBehaviour, IPooledObject
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        gameObject.SetActive(false);
+        if (collision.gameObject.tag != "Enemy" && collision.gameObject.tag != "EnemyMelee")
+        {
+            gameObject.SetActive(false);
+        }
     }
+
+    private Combat combat;
 
     public void SetCombatStats(Combat other)
     {
