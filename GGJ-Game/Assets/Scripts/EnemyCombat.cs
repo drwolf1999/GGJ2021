@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class EnemyCombat : Combat
 {
+    private Animator animator;
     private void Start()
     {
+        animator = GetComponent<Animator>();
+
         Health = 100;
         Attack = 18;
         Defense = 0;
@@ -18,7 +21,8 @@ public class EnemyCombat : Combat
 
     protected override void Die()
     {
-        Destroy(gameObject);
+        animator.SetBool("meleeDead", true);
+        Destroy(gameObject, 0.3f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -26,8 +30,10 @@ public class EnemyCombat : Combat
         string tag = collision.gameObject.tag;
         if(tag == "PlayerBullet")
         {
+            animator.SetBool("isHit", true);
             Combat playerCombat = collision.gameObject.GetComponent<BulletMove>().GetCombatStats();
             GetDamage(playerCombat);
         }
+        animator.SetBool("isHit", false);
     }
 }

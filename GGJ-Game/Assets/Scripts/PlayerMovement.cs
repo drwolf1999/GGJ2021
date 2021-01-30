@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private Vector2 target, mouse;
     private float angle;
+    private Animator animator;
 
     public float speed;
 
@@ -20,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         //playerCombat = GetComponent<Combat>();
         objectPooler = ObjectPooler.Instance;
@@ -51,6 +53,15 @@ public class PlayerMovement : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+        if(movement.x != 0.0f || movement.y != 0.0f)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+
         PlayerLook();
         Shoot();
     }
