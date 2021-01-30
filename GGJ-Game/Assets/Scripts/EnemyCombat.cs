@@ -21,7 +21,7 @@ public class EnemyCombat : Combat
 
     protected override void Die()
     {
-        animator.SetBool("meleeDead", true);
+        animator.SetBool("isDead", true);
         Destroy(gameObject, 0.3f);
     }
 
