@@ -14,6 +14,10 @@ public class Combat : MonoBehaviour
     public int CriticalDamage { get; set; }
     public int Penetration { get; set; }
 
+    public string dieName;
+    public string damageName;
+    [SerializeField] SoundManager soundManager;
+
     public void GetDamage(Combat combat)
     {
         int ran = (int)Random.Range(1f, 100f);
@@ -35,6 +39,7 @@ public class Combat : MonoBehaviour
 
         if(Health <= 0)
         {
+            soundManager.playSoundEffect(dieName);
             Die();
         }
 
@@ -46,6 +51,7 @@ public class Combat : MonoBehaviour
         {
             tmp.fontSize = 5;
             tmp.faceColor = new Color(212, 1, 0);
+            soundManager.playSoundEffect(damageName);
         }
         else
         {
