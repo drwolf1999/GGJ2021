@@ -485,6 +485,7 @@ GameObject:
   - component: {fileID: 342544137}
   - component: {fileID: 342544139}
   - component: {fileID: 342544140}
+  - component: {fileID: 342544141}
   m_Layer: 13
   m_Name: RangedEnemy
   m_TagString: Enemy
@@ -555,6 +556,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 080907889564fd149a2b431020ff70be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &342544141
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342544136}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab6fd444439e32c419f2e94134927a3c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &417158796
 GameObject:
   m_ObjectHideFlags: 0
