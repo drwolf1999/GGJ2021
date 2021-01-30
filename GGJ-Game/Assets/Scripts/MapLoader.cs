@@ -49,7 +49,6 @@ public class MapLoader : MonoBehaviour
 	void Start()
 	{
 		/*		GenerateStage(stageController.mapRow, stageController.mapCol);*/
-		minimap.GenerateMinimap();
 	}
 
 	// Update is called once per frame
@@ -70,7 +69,7 @@ public class MapLoader : MonoBehaviour
 	/// <param name="col">col size</param>
 	/// <param name="position">pivot position</param>
 	/// <param name="type">Room type bit (up, right, down, left)</param>
-	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType)
+	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType, ref bool[][] available)
 	{
 		Vector3 doorScale = new Vector3(0.44f, 0.22f, 1f);
 		/// ln : 상하 통로
@@ -158,12 +157,14 @@ public class MapLoader : MonoBehaviour
 					instance.transform.parent = room.transform;
 					instance.transform.Rotate(rotation);
 					instance.transform.localScale = scale;
-					if (startOrEndOrNo == 1) // start position
+					available[r][c] = false;
+					if (!instance.CompareTag("Obstacle") && obj != door)
 					{
-						if (!instance.CompareTag("Obstacle") && obj != door)
+						if (startOrEndOrNo == 1) // start position
 						{
 							player.transform.position = spawnPosition;
 						}
+						available[r][c] = true;
 					}
 				}
 			}
@@ -200,8 +201,7 @@ public class MapLoader : MonoBehaviour
 				room.transform.parent = stageController.mapParent;
 				room.name = "room_" + r + "_" + c;
 				Vector2 spawnPosition = new Vector2(stageController.roomCol * c, stageController.roomRow * (row - 1 - r));
-				GenerateRoom(stageController.roomRow, stageController.roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room, roomTypes[Random.Range(0, roomTypes.Count - 1)]);
-				roomDesign.SpawnEnemy(stageController.roomRow, stageController.roomCol, spawnPosition);
+				GenerateRoom(stageController.roomRow, stageController.roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room, roomTypes[Random.Range(0, roomTypes.Count - 1)], ref stageController.available[r][c]);
 			}
 		}
 		// A*

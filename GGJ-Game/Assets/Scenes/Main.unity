@@ -2943,6 +2943,7 @@ MonoBehaviour:
   currentStage: 1
   mapParent: {fileID: 1080842325}
   enemyParent: {fileID: 1873417223}
+  minimap: {fileID: 1143293007}
   debugBTN: {fileID: 1535013890}
 --- !u!114 &1908462238
 MonoBehaviour:
@@ -2969,6 +2970,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4959d761b27ef419469e198044bddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy:
+  - {fileID: 342544136}
+  - {fileID: 1014685629}
 --- !u!4 &1908462240
 Transform:
   m_ObjectHideFlags: 0
