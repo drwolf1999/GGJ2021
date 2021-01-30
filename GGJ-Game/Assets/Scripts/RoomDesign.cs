@@ -17,7 +17,7 @@ public class RoomDesign : MonoBehaviour
 		//
 	}
 
-	public void SpawnEnemy(int playerRow, int playerCol, in bool[][] available)
+	public void SpawnEnemy(int playerRow, int playerCol, in bool[][] available, Transform eParent)
 	{
 		int row = stageController.roomRow, col = stageController.roomCol;
 		int mapRow = stageController.mapRow, mapCol = stageController.mapCol;
@@ -30,7 +30,7 @@ public class RoomDesign : MonoBehaviour
 				if (!available[r][c]) continue;
 				if (Random.Range(1, 13 * 13) > 4) continue;
 				GameObject e = Instantiate(enemy[Random.Range(0, enemy.Length)], position + new Vector2(c, row - 1 - r), Quaternion.identity);
-				e.transform.parent = stageController.enemyParent;
+				e.transform.parent = eParent;
 			}
 		}
 	}

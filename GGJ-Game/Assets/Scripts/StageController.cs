@@ -86,7 +86,12 @@ public class StageController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		IsClearCurrentRoom();
+	}
 
+	private string EnemyRoomName(int r, int c)
+	{
+		return "enemy_" + r + "_" + c;
 	}
 
 	public void GoNextStage()
@@ -95,12 +100,28 @@ public class StageController : MonoBehaviour
 		ResetArray();
 		foreach (Transform transform in mapParent) Destroy(transform.gameObject);
 		foreach (Transform transform in enemyParent) Destroy(transform.gameObject);
+		/// create enemy room
+		for (int r = 0; r < mapRow; r++)
+		{
+			for (int c = 0; c < mapCol; c++)
+			{
+				GameObject eroom = new GameObject();
+				eroom.name = EnemyRoomName(r, c);
+				eroom.transform.parent = enemyParent;
+			}
+		}
+		/// end
 		currentStage++;
 		mapLoader.GenerateStage(mapRow, mapCol, this);
 	}
 
-	public void spawnEnemy(int row, int col)
+	public void SpawnEnemy(int row, int col)
 	{
-		roomDesign.SpawnEnemy(row, col, available[row][col]);
+		roomDesign.SpawnEnemy(row, col, available[row][col], enemyParent.Find(EnemyRoomName(row, col)));
+	}
+
+	private void IsClearCurrentRoom()
+	{
+		Vector2Int playerPosition = minimap.PlayerPosition;
 	}
 }

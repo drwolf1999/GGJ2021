@@ -32,16 +32,28 @@ public class Minimap : MonoBehaviour
 		return "miniTile_" + r + "_" + c;
 	}
 
+	public Vector2Int PlayerPosition
+	{
+		get
+		{
+			int mapRow = stageController.mapRow, mapCol = stageController.mapCol;
+			Vector2 position = player.transform.position;
+			int roomRow = stageController.roomRow, roomCol = stageController.roomCol;
+			Vector2Int pPosition = new Vector2Int();
+			pPosition.x = mapRow - 1 - (int)(position.y / roomRow);
+			pPosition.y = (int)(position.x / roomCol);
+			pPosition.x = MethodsForMap.Clamp(pPosition.x, 0, mapCol - 1);
+			pPosition.y = MethodsForMap.Clamp(pPosition.y, 0, mapRow - 1);
+			return pPosition;
+		}
+	}
+
 	public void UpdateMinimap()
 	{
 		int mapRow = stageController.mapRow, mapCol = stageController.mapCol;
 		Vector2 position = player.transform.position;
 		int roomRow = stageController.roomRow, roomCol = stageController.roomCol;
-		Vector2Int playerPosition = new Vector2Int();
-		playerPosition.x = mapRow - 1 - (int)(position.y / roomRow);
-		playerPosition.y = (int)(position.x / roomCol);
-		playerPosition.x = MethodsForMap.Clamp(playerPosition.x, 0, mapCol - 1);
-		playerPosition.y = MethodsForMap.Clamp(playerPosition.y, 0, mapRow - 1);
+		Vector2Int playerPosition = PlayerPosition;
 		// update past location
 		if (lastPlayerPosition.x != -100 && lastPlayerPosition.y != -100)
 		{
@@ -55,7 +67,7 @@ public class Minimap : MonoBehaviour
 		if (!stageController.createdEnemy[playerPosition.x, playerPosition.y])
 		{
 			// create enemy
-			stageController.spawnEnemy(playerPosition.x, playerPosition.y);
+			stageController.SpawnEnemy(playerPosition.x, playerPosition.y);
 		}
 		// end
 		lastPlayerPosition = playerPosition;
