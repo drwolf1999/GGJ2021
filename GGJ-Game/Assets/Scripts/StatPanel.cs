@@ -21,6 +21,9 @@ public class StatPanel : MonoBehaviour
 	[HideInInspector]
 	public string getStat;
 
+	private PlayerCombat player;
+	private StageController stageController;
+
 	private List<string> stat = new List<string>()
 	{
 		"Health",
@@ -32,6 +35,13 @@ public class StatPanel : MonoBehaviour
 		"CriticalDamage",
 		"Penetration"
 	};
+
+	private void Awake()
+	{
+		player = GameObject.Find("Player").GetComponent<PlayerCombat>();
+		stageController = GameObject.Find("MapLoader").GetComponent<StageController>();
+	}
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -153,6 +163,10 @@ public class StatPanel : MonoBehaviour
 
 		save.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Save";
 		save.SetActive(false);
+
+		Button button = save.GetComponent<Button>();
+		button.onClick.AddListener(SaveButtonEvent);
+
 		saveBtn = save;
 
 		/// text instead save btn
@@ -174,7 +188,7 @@ public class StatPanel : MonoBehaviour
 
 	private void LoadCanvasSize()
 	{
-		RectTransform canvas = transform.parent.parent.GetComponent<Canvas>().GetComponent<RectTransform>();
+		RectTransform canvas = transform.parent.GetComponent<Canvas>().GetComponent<RectTransform>();
 		canvasHeight = canvas.rect.height;
 		canvasWidth = canvas.rect.width;
 	}
@@ -209,5 +223,12 @@ public class StatPanel : MonoBehaviour
 			saveBtn.SetActive(true);
 			textInsteadSaveBtn.SetActive(false);
 		}
+	}
+
+	private void SaveButtonEvent()
+	{
+		player.LossStat(lossStat);
+		player.GetStat(getStat);
+		stageController.GoNextStage();
 	}
 }

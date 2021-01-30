@@ -28,7 +28,7 @@ public class EnemyRanged : MonoBehaviour
 
     void Start()
     {
-        isAwaken = false;
+        isAwaken = true;
 
         timer = 0.0f;
         waitingTime = 2.0f;

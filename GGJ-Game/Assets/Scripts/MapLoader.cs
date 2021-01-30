@@ -11,6 +11,7 @@ public class MapLoader : MonoBehaviour
 	private Dictionary<char, GameObject> tileMap;
 	private List<string[]> roomTypes;
 	private GameObject player;
+	public List<GameObject>[,] doors;
 
 	[SerializeField] private GameObject door;
 
@@ -69,7 +70,7 @@ public class MapLoader : MonoBehaviour
 	/// <param name="col">col size</param>
 	/// <param name="position">pivot position</param>
 	/// <param name="type">Room type bit (up, right, down, left)</param>
-	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType, ref bool[][] available)
+	private void GenerateRoom(int row, int col, Vector2 position, int type, int startOrEndOrNo, ref GameObject room, string[] roomType, ref bool[][] available, ref List<GameObject> roomDoors)
 	{
 		Vector3 doorScale = new Vector3(0.44f, 0.22f, 1f);
 		/// ln : 상하 통로
@@ -81,6 +82,7 @@ public class MapLoader : MonoBehaviour
 				Vector3 scale = Vector3.one;
 				Vector3 rotation = Vector3.zero;
 				Vector3 spawnPosition = position + new Vector2(c, row - 1 - r);
+				bool isGoal = false;
 				if (((type & (1 << DIR.UP)) > 0 && (0 <= r && r <= 2) && IsCenter(c, col)))
 				{
 					if (r == 0)
@@ -111,9 +113,10 @@ public class MapLoader : MonoBehaviour
 					spawnPosition.y -= 0.5f;
 					scale = doorScale;
 				}
-				else if ((type & (1 << DIR.DOWN)) > 0 && r == row - 1 && IsCenter(c, col))
+				else if (((type & (1 << DIR.DOWN)) > 0 || startOrEndOrNo == 2) && r == row - 1 && IsCenter(c, col))
 				{
 					if (c == col / 2) continue;
+					isGoal = startOrEndOrNo == 2;
 					obj = door;
 					rotation.z -= 2 * 90f;
 					spawnPosition.x += 0.5f;
@@ -158,6 +161,15 @@ public class MapLoader : MonoBehaviour
 					instance.transform.Rotate(rotation);
 					instance.transform.localScale = scale;
 					available[r][c] = false;
+
+					///
+					if (isGoal)
+					{
+						EdgeCollider2D edge = instance.AddComponent<EdgeCollider2D>();
+						edge.offset = new Vector2(0, -1f);
+						edge.isTrigger = true;
+					}
+					///
 					if (!instance.CompareTag("Obstacle") && obj != door)
 					{
 						if (startOrEndOrNo == 1) // start position
@@ -165,6 +177,10 @@ public class MapLoader : MonoBehaviour
 							player.transform.position = spawnPosition;
 						}
 						available[r][c] = true;
+					}
+					else if (obj == door)
+					{
+						roomDoors.Add(instance);
 					}
 				}
 			}
@@ -179,6 +195,7 @@ public class MapLoader : MonoBehaviour
 	public void GenerateStage(int row, int col, StageController stageController)
 	{
 		int[,] shape = GenerateShape(row, col);
+		doors = new List<GameObject>[row, col];
 		/*		/// DEBUG
 				string s = "";
 				for (int i = 0; i < row; i++)
@@ -196,12 +213,16 @@ public class MapLoader : MonoBehaviour
 		{
 			for (int c = 0; c < col; c++)
 			{
+				doors[r, c] = new List<GameObject>();
 				Vector2 v = new Vector2(r, c);
 				room = new GameObject();
 				room.transform.parent = stageController.mapParent;
 				room.name = "room_" + r + "_" + c;
 				Vector2 spawnPosition = new Vector2(stageController.roomCol * c, stageController.roomRow * (row - 1 - r));
-				GenerateRoom(stageController.roomRow, stageController.roomCol, spawnPosition, shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room, roomTypes[Random.Range(0, roomTypes.Count - 1)], ref stageController.available[r][c]);
+				GenerateRoom(stageController.roomRow, stageController.roomCol, spawnPosition,
+							shape[r, c], (v == start ? 1 : v == end ? 2 : 0), ref room,
+							roomTypes[Random.Range(0, roomTypes.Count - 1)], ref stageController.available[r][c],
+							ref doors[r, c]);
 			}
 		}
 		// A*

@@ -10,6 +10,8 @@ public class StageController : MonoBehaviour
 	private MapLoader mapLoader;
 	private RoomDesign roomDesign;
 
+	[SerializeField] private StatPanel statPanel;
+
 	[SerializeField] public Transform mapParent;
 	[SerializeField] public Transform enemyParent;
 	[SerializeField] public Minimap minimap;
@@ -86,7 +88,10 @@ public class StageController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		IsClearCurrentRoom();
+		if (IsClearCurrentRoom())
+		{
+			OpenDoor();
+		}
 	}
 
 	private string EnemyRoomName(int r, int c)
@@ -94,8 +99,13 @@ public class StageController : MonoBehaviour
 		return "enemy_" + r + "_" + c;
 	}
 
-	public void GoNextStage()
+	public void BeforeNextStage()
 	{
+		statPanel.gameObject.SetActive(true);
+	}
+
+	public void GoNextStage() {
+		statPanel.gameObject.SetActive(false);
 		minimap.ResetMinimap();
 		ResetArray();
 		foreach (Transform transform in mapParent) Destroy(transform.gameObject);
@@ -113,15 +123,52 @@ public class StageController : MonoBehaviour
 		/// end
 		currentStage++;
 		mapLoader.GenerateStage(mapRow, mapCol, this);
+		Debug.Log("STAGE: " + currentStage);
 	}
 
 	public void SpawnEnemy(int row, int col)
 	{
 		roomDesign.SpawnEnemy(row, col, available[row][col], enemyParent.Find(EnemyRoomName(row, col)));
+		CloseDoor();
 	}
 
-	private void IsClearCurrentRoom()
+	private bool IsClearCurrentRoom()
 	{
 		Vector2Int playerPosition = minimap.PlayerPosition;
+		Transform tf = enemyParent.Find(EnemyRoomName(playerPosition.x, playerPosition.y));
+		return tf.childCount == 0;
+	}
+	
+	private void OpenDoor()
+	{
+		Vector2Int playerPosition = minimap.PlayerPosition;
+		ref List<GameObject> doors = ref mapLoader.doors[playerPosition.x, playerPosition.y];
+		foreach (GameObject doorGameObject in doors)
+		{
+			Door door = doorGameObject.GetComponent<Door>();
+			door.Open();
+			GameObject pair = door.GetAdjacentDoor();
+			if (pair != null)
+			{
+				Door pairDoor = pair.GetComponent<Door>();
+				pairDoor.Open();
+			}
+		}
+	}
+	private void CloseDoor()
+	{
+		Vector2Int playerPosition = minimap.PlayerPosition;
+		ref List<GameObject> doors = ref mapLoader.doors[playerPosition.x, playerPosition.y];
+		foreach (GameObject doorGameObject in doors)
+		{
+			Door door = doorGameObject.GetComponent<Door>();
+			door.Close();
+			GameObject pair = door.GetAdjacentDoor();
+			if (pair != null)
+			{
+				Door pairDoor = pair.GetComponent<Door>();
+				pairDoor.Close();
+			}
+		}
 	}
 }
