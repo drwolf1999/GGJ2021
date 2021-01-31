@@ -368,10 +368,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 22, y: 0}
-      - {x: 0, y: 0}
-      - {x: 0, y: 18}
-      - {x: 22, y: 18}
+    - - {x: 21.5, y: -0.5}
+      - {x: -0.5, y: -0.5}
+      - {x: -0.5, y: 17.5}
+      - {x: 21.5, y: 17.5}
 --- !u!4 &143829954
 Transform:
   m_ObjectHideFlags: 0
@@ -614,7 +614,6 @@ GameObject:
   - component: {fileID: 228535000}
   - component: {fileID: 228534999}
   - component: {fileID: 228534998}
-  - component: {fileID: 228534997}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -644,27 +643,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &228534997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228534995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c74ae8e4d5fa85f43a75ac4eb94258da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  togglePrefab: {fileID: 5194870702532609839, guid: 9e33db414153a844eb69a617d9610ee0,
-    type: 3}
-  buttonPrefab: {fileID: 7244488306045164466, guid: 23263bb9283c91a41bad37d0e42caea6,
-    type: 3}
-  objectParent: {fileID: 1561020130}
-  getToggleParent: {fileID: 755871399}
-  lossToggleParent: {fileID: 1528527682}
-  lossStat: 
-  getStat: 
 --- !u!114 &228534998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -803,7 +781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieName: bugDie
   damageName: bugDamage
-  soundManager: {fileID: 0}
+  soundManager: {fileID: 1836161596}
 --- !u!95 &342544141
 Animator:
   serializedVersion: 3
@@ -2140,6 +2118,7 @@ GameObject:
   - component: {fileID: 1362195144}
   - component: {fileID: 1362195143}
   - component: {fileID: 1362195142}
+  - component: {fileID: 1362195145}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -2235,6 +2214,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362195140}
   m_CullTransparentMesh: 0
+--- !u!114 &1362195145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362195140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c74ae8e4d5fa85f43a75ac4eb94258da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  togglePrefab: {fileID: 5194870702532609839, guid: 9e33db414153a844eb69a617d9610ee0,
+    type: 3}
+  buttonPrefab: {fileID: 7244488306045164466, guid: 23263bb9283c91a41bad37d0e42caea6,
+    type: 3}
+  objectParent: {fileID: 1561020130}
+  getToggleParent: {fileID: 755871399}
+  lossToggleParent: {fileID: 1528527682}
+  lossStat: 
+  getStat: 
 --- !u!1 &1403859877
 GameObject:
   m_ObjectHideFlags: 0
@@ -2874,7 +2874,7 @@ RectTransform:
   - {fileID: 1535013889}
   - {fileID: 1362195141}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3157,6 +3157,7 @@ MonoBehaviour:
   roomRow: 18
   roomCol: 22
   currentStage: 1
+  statPanel: {fileID: 1362195145}
   mapParent: {fileID: 1080842325}
   enemyParent: {fileID: 1873417223}
   minimap: {fileID: 1143293007}
@@ -3201,7 +3202,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2079970174
 GameObject:
