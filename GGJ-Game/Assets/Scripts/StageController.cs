@@ -61,7 +61,8 @@ public class StageController : MonoBehaviour
 
 	public void ResetAll()
 	{
-		player.ResetStat();
+		player.gameObject.SetActive(true);
+		player.Health = player.MaxHealth;
 		LoadComponent();
 		currentStage = 0;
 		GoNextStage();
@@ -118,6 +119,7 @@ public class StageController : MonoBehaviour
 	}
 
 	public void GoNextStage() {
+		player.Health = player.MaxHealth;
 		statPanel.gameObject.SetActive(false);
 		minimap.ResetMinimap();
 		ResetArray();

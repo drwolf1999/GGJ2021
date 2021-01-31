@@ -3611,7 +3611,6 @@ MonoBehaviour:
   rotateSpeed: 0
   accelerationTime: 2
   maxSpeed: 4
-  enemyCombat: {fileID: 5979636079464640459}
 --- !u!4 &5979636079464640461
 Transform:
   m_ObjectHideFlags: 0
@@ -4375,7 +4374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350f5ee31c45ae449b144482766cb934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 7531121023020459399}
+  myCollider: {fileID: 7531121023020459399}
 --- !u!4 &7531121023669937552
 Transform:
   m_ObjectHideFlags: 0

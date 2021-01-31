@@ -71,11 +71,25 @@ public class StatPanel : MonoBehaviour
 		labelRT.anchorMin = labelRT.anchorMax = labelRT.pivot = anchor;
 		labelRT.localPosition = Vector3.zero;
 
+		GameObject stageLabel = new GameObject();
+		stageLabel.name = "loss label";
+		stageLabel.transform.parent = label.transform;
+		Text stageText = stageLabel.AddComponent<Text>();
+		stageText.text = "stage: " + stageController.currentStage;
+		stageText.font = font;
+		stageText.fontSize = 40;
+		RectTransform stageRT = stageLabel.GetComponent<RectTransform>();
+		stageRT.localPosition = new Vector2(-canvasWidth * 2f / 12f, 0f);
+		stageRT.sizeDelta = new Vector2(canvasWidth * 3f / 6f, 100f);
+
+
+
+
 		GameObject getLabel = new GameObject();
 		getLabel.name = "get label";
 		getLabel.transform.parent = label.transform;
 		Text getText = getLabel.AddComponent<Text>();
-		getText.text = "get stat";
+		getText.text = "find stat";
 		getText.font = font;
 		getText.fontSize = 40;
 		RectTransform getRT = getLabel.GetComponent<RectTransform>();
@@ -85,7 +99,7 @@ public class StatPanel : MonoBehaviour
 		lossLabel.name = "loss label";
 		lossLabel.transform.parent = label.transform;
 		Text lossText = lossLabel.AddComponent<Text>();
-		lossText.text = "loss stat";
+		lossText.text = "lose stat";
 		lossText.font = font;
 		lossText.fontSize = 40;
 		RectTransform lossRT = lossLabel.GetComponent<RectTransform>();
@@ -159,7 +173,7 @@ public class StatPanel : MonoBehaviour
 			{
 				// loss stat btn
 				GameObject lossBtn = Instantiate(togglePrefab);
-				lossBtn.name = "loss_" + stat[i];
+				lossBtn.name = "lose_" + stat[i];
 				lossBtn.transform.parent = obj.transform;
 
 				RectTransform lossBtnRT = lossBtn.GetComponent<RectTransform>();
@@ -178,7 +192,7 @@ public class StatPanel : MonoBehaviour
 			}
 			else
 			{
-				statText.text += " (can't loss)";
+				statText.text += " (can't lose)";
 			}
 		}
 		/// save btn

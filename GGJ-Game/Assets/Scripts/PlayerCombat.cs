@@ -29,7 +29,8 @@ public class PlayerCombat : Combat
 	protected override void Die()
 	{
 		uiManager.SubMenuToggle();
-		Destroy(gameObject);
+		this.gameObject.SetActive(false);
+/*		Destroy(gameObject);*/
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
