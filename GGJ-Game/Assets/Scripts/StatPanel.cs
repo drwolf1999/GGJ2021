@@ -45,8 +45,7 @@ public class StatPanel : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		LoadCanvasSize();
-		LoadStat();
+		
 	}
 
 	// Update is called once per frame
@@ -55,12 +54,9 @@ public class StatPanel : MonoBehaviour
 		ButtonActive();
 	}
 
-	private void LoadStat()
+	public void LoadStat()
 	{
-		foreach (Transform child in objectParent.transform)
-		{
-			Destroy(child.gameObject);
-		}
+		LoadCanvasSize();
 		Vector2 secondElementPos = new Vector2(canvasWidth * 2f / 12f + 100f, 0),
 				thirdElementPos = new Vector2(canvasWidth * 4f / 12f, 0);
 		Font font = Resources.GetBuiltinResource<Font>("Arial.ttf");
@@ -220,6 +216,8 @@ public class StatPanel : MonoBehaviour
 		textOBJ.SetActive(false);
 
 		textInsteadSaveBtn = textOBJ;
+		// player off
+		player.gameObject.SetActive(false);
 	}
 
 	private void LoadCanvasSize()
@@ -263,8 +261,13 @@ public class StatPanel : MonoBehaviour
 
 	private void SaveButtonEvent()
 	{
+		player.gameObject.SetActive(true);
 		player.LossStat(lossStat);
 		player.GetStat(getStat);
 		stageController.GoNextStage();
+		foreach (Transform child in objectParent.transform)
+		{
+			Destroy(child.gameObject);
+		}
 	}
 }

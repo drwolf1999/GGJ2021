@@ -15,12 +15,19 @@ public class StageController : MonoBehaviour
 	[SerializeField] public Transform mapParent;
 	[SerializeField] public Transform enemyParent;
 	[SerializeField] public Minimap minimap;
+	private PlayerCombat player;
 
 	public bool[,] createdEnemy;
 	public bool[][][][] available;
 
 	private void Awake()
 	{
+		LoadComponent();
+	}
+
+	private void LoadComponent()
+	{
+		player = GameObject.Find("Player").GetComponent<PlayerCombat>();
 		mapLoader = this.GetComponent<MapLoader>();
 		roomDesign = this.GetComponent<RoomDesign>();
 
@@ -50,6 +57,14 @@ public class StageController : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public void ResetAll()
+	{
+		player.ResetStat();
+		LoadComponent();
+		currentStage = 0;
+		GoNextStage();
 	}
 
 	private void ResetArray()
@@ -99,6 +114,7 @@ public class StageController : MonoBehaviour
 	public void BeforeNextStage()
 	{
 		statPanel.gameObject.SetActive(true);
+		statPanel.LoadStat();
 	}
 
 	public void GoNextStage() {

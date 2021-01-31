@@ -24,7 +24,10 @@ public class Minimap : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		UpdateMinimap();
+		if (player != null)
+		{
+			UpdateMinimap();
+		}
 	}
 
 	private string GetTileName(int r, int c)
@@ -36,6 +39,7 @@ public class Minimap : MonoBehaviour
 	{
 		get
 		{
+			if (player == null) return Vector2Int.zero;
 			int mapRow = stageController.mapRow, mapCol = stageController.mapCol;
 			Vector2 position = player.transform.position;
 			int roomRow = stageController.roomRow, roomCol = stageController.roomCol;

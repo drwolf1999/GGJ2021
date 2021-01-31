@@ -8,7 +8,6 @@ public class EnemyRanged : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] List<Transform> firePoints;
     [SerializeField] Transform spriteTransform;
-
     public bool isAwaken = false;
 
     public string bulletTag = "";
@@ -25,14 +24,26 @@ public class EnemyRanged : MonoBehaviour
 
     ObjectPooler objectPooler;
 
-    [SerializeField] Combat enemyCombat;
+
+    private StageController stageController;
+
+    private Combat enemyCombat;
+
+    private void Awake()
+    {
+        enemyCombat = this.GetComponent<EnemyCombat>();
+        stageController = GameObject.Find("MapLoader").GetComponent<StageController>();
+    }
 
     void Start()
     {
+        enemyCombat.Health = 10 + 10 * stageController.currentStage;
+        enemyCombat.Attack = 25 + 10 * stageController.currentStage;
+
         isAwaken = true;
 
         timer = 0.0f;
-        waitingTime = 2.0f;
+        waitingTime = 3.0f;
 
         objectPooler = ObjectPooler.Instance;
 

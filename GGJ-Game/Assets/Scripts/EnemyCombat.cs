@@ -5,11 +5,13 @@ using UnityEngine;
 public class EnemyCombat : Combat
 {
     private Animator animator;
-    private void Start()
-    {
+	private void Awake()
+	{
         animator = GetComponent<Animator>();
-
-        Health = 100;
+	}
+	private void Start()
+    {
+        Health = 40;
         Attack = 18;
         Defense = 0;
         MovementSpeed = 8;

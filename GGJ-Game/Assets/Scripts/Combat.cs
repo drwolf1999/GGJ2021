@@ -34,7 +34,7 @@ public class Combat : MonoBehaviour
         else // Not Critical
         {
             //Debug.Log("NOT CRIT: " + combat.Attack * (100 / (100 + Defense - (Defense * combat.Penetration))));
-            dmg = combat.Attack * (100 / (100 + Defense - (Defense * combat.Penetration)));
+            dmg = (float)combat.Attack * (100.0f / (100.0f + (float)Defense - ((float)Defense * (float)combat.Penetration)));
             Health -= (int)dmg;
         }
 

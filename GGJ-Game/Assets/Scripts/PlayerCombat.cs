@@ -4,20 +4,31 @@ using UnityEngine;
 
 public class PlayerCombat : Combat
 {
+	private UI uiManager;
 	private void Awake()
+	{
+		ResetStat();
+
+		uiManager = GameObject.Find("UI").GetComponent<UI>();
+	}
+
+	public void ResetStat()
 	{
 		MaxHealth = 200;
 		Health = MaxHealth;
-		Attack = 18;
+		Attack = 20;
 		Defense = 0;
 		MovementSpeed = 7;
-		AttackSpeed = 1;
+		AttackSpeed = 300;
 		CriticalRate = 10;
 		CriticalDamage = 50;
 		Penetration = 0;
 	}
+
+
 	protected override void Die()
 	{
+		uiManager.SubMenuToggle();
 		Destroy(gameObject);
 	}
 
@@ -84,16 +95,16 @@ public class PlayerCombat : Combat
 				stat = 50;
 				break;
 			case "Attack":
-				stat = 0;
+				stat = 5;
 				break;
 			case "Defense":
 				stat = 0;
 				break;
 			case "MovementSpeed":
-				stat = 0;
+				stat = 1;
 				break;
 			case "AttackSpeed":
-				stat = 0;
+				stat = 10;
 				break;
 			case "CriticalRate":
 				stat = 0;
@@ -117,25 +128,25 @@ public class PlayerCombat : Combat
 				r = Methods.Max(MaxHealth - 50, GetMinStatByName(name));
 				break;
 			case "Attack":
-				r = Methods.Max(Attack - 5, GetMinStatByName(name));
+				r = Methods.Max(Attack - 15, GetMinStatByName(name));
 				break;
 			case "Defense":
-				r = Methods.Max(Defense - 20, GetMinStatByName(name));
+				r = Methods.Max(Defense - 30, GetMinStatByName(name));
 				break;
 			case "MovementSpeed":
 				r = Methods.Max(MovementSpeed - 1, GetMinStatByName(name));
 				break;
 			case "AttackSpeed":
-				r = Methods.Max(AttackSpeed - 1, GetMinStatByName(name));
+				r = Methods.Max(AttackSpeed - 50, GetMinStatByName(name));
 				break;
 			case "CriticalRate":
 				r = Methods.Max(CriticalRate - 5, GetMinStatByName(name));
 				break;
 			case "CriticalDamage":
-				r = Methods.Max(CriticalDamage - 5, GetMinStatByName(name));
+				r = Methods.Max(CriticalDamage - 10, GetMinStatByName(name));
 				break;
 			case "Penetration":
-				r = Methods.Max(Penetration - 20, GetMinStatByName(name));
+				r = Methods.Max(Penetration - 1, GetMinStatByName(name));
 				break;
 		}
 		return r;
@@ -181,25 +192,25 @@ public class PlayerCombat : Combat
 				r = MaxHealth + 50;
 				break;
 			case "Attack":
-				r = Attack + 5;
+				r = Attack + 15;
 				break;
 			case "Defense":
-				r = Defense + 20;
+				r = Defense + 30;
 				break;
 			case "MovementSpeed":
 				r = MovementSpeed + 1;
 				break;
 			case "AttackSpeed":
-				r = AttackSpeed + 1;
+				r = AttackSpeed + 50;
 				break;
 			case "CriticalRate":
 				r = CriticalRate + 5;
 				break;
 			case "CriticalDamage":
-				r = CriticalDamage + 5;
+				r = CriticalDamage + 10;
 				break;
 			case "Penetration":
-				r = Penetration + 20;
+				r = Penetration + 1;
 				break;
 		}
 		return r;

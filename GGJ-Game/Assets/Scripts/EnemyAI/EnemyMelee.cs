@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class EnemyMelee : MonoBehaviour
 {
-    [SerializeField] private Collider2D collider;
+    private StageController stageController;
+
+    private Combat enemyCombat;
+
+	private void Awake()
+	{
+        enemyCombat = this.GetComponent<EnemyCombat>();
+        stageController = GameObject.Find("MapLoader").GetComponent<StageController>();
+    }
+
+	private void Start()
+	{
+        enemyCombat.Health = 60 + 15 * stageController.currentStage;
+        enemyCombat.Attack = 20 + 5 * stageController.currentStage;
+	}
+
+
+	[SerializeField] private Collider2D myCollider;
 
     public void SwitchCollider()
     {
-        collider.enabled = false;
+        myCollider.enabled = false;
         StartCoroutine("TurnOnCollider");
     }
 
     IEnumerator TurnOnCollider()
     {
         yield return new WaitForSeconds(2.0f);
-        collider.enabled = true;
+        myCollider.enabled = true;
     }
 }
