@@ -16,7 +16,6 @@ public class StageController : MonoBehaviour
 	[SerializeField] public Transform enemyParent;
 	[SerializeField] public Minimap minimap;
 
-	[SerializeField] private UnityEngine.UI.Button debugBTN; // go nextStage
 	public bool[,] createdEnemy;
 	public bool[][][][] available;
 
@@ -24,8 +23,6 @@ public class StageController : MonoBehaviour
 	{
 		mapLoader = this.GetComponent<MapLoader>();
 		roomDesign = this.GetComponent<RoomDesign>();
-
-		debugBTN.onClick.AddListener(GoNextStage);
 
 		createdEnemy = new bool[mapRow, mapCol];
 		for (int r = 0; r < mapRow; r++)

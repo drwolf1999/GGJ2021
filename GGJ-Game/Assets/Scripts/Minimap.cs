@@ -44,8 +44,8 @@ public class Minimap : MonoBehaviour
 			{
 				pPosition.x = mapRow - 1 - (int)(position.y / roomRow);
 				pPosition.y = (int)(position.x / roomCol);
-				pPosition.x = MethodsForMap.Clamp(pPosition.x, 0, mapCol - 1);
-				pPosition.y = MethodsForMap.Clamp(pPosition.y, 0, mapRow - 1);
+				pPosition.x = Methods.Clamp(pPosition.x, 0, mapCol - 1);
+				pPosition.y = Methods.Clamp(pPosition.y, 0, mapRow - 1);
 			}
 			return pPosition;
 		}

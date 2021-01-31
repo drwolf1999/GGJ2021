@@ -28,7 +28,7 @@ public class RoomDesign : MonoBehaviour
 			for (int c = 0; c < col; c++)
 			{
 				if (!available[r][c]) continue;
-				if (Random.Range(1, 20 * 16) > 1) continue;
+				if (Random.Range(1, 20 * 16) > 4) continue;
 				GameObject e = Instantiate(enemy[Random.Range(0, enemy.Length)], position + new Vector2(c, row - 1 - r), Quaternion.identity);
 				e.transform.parent = eParent;
 			}

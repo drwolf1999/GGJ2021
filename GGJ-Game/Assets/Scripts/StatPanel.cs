@@ -57,8 +57,12 @@ public class StatPanel : MonoBehaviour
 
 	private void LoadStat()
 	{
-		Vector2 secondElementPos = new Vector2(canvasWidth * 3f / 12f + 100f, 0),
-				thirdElementPos = new Vector2(canvasWidth * 5f / 12f, 0);
+		foreach (Transform child in objectParent.transform)
+		{
+			Destroy(child.gameObject);
+		}
+		Vector2 secondElementPos = new Vector2(canvasWidth * 2f / 12f + 100f, 0),
+				thirdElementPos = new Vector2(canvasWidth * 4f / 12f, 0);
 		Font font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 		Vector2 anchor = new Vector2(0.5f, 0.5f);
 		/// show label
@@ -93,6 +97,7 @@ public class StatPanel : MonoBehaviour
 		/// content
 		for (int i = 0; i < stat.Count; i++)
 		{
+			int ds;
 
 			GameObject obj = new GameObject();
 			obj.transform.SetParent(objectParent, false);
@@ -118,8 +123,23 @@ public class StatPanel : MonoBehaviour
 			statText.font = font;
 			statText.alignment = TextAnchor.MiddleLeft;
 			RectTransform statRT = statName.GetComponent<RectTransform>();
-			statRT.sizeDelta = new Vector2(canvasWidth * 4f / 6f, 100f);
-			statRT.localPosition = new Vector2(-canvasWidth * 1f / 12f, 0f);
+			statRT.sizeDelta = new Vector2(canvasWidth * 3f / 6f, 100f);
+			statRT.localPosition = new Vector2(-canvasWidth * 2f / 12f, 0f);
+
+			// Show Stat
+			GameObject statInfo = new GameObject();
+			statInfo.name = "statInfo";
+			Text statInfoText = statInfo.AddComponent<Text>();
+			statInfoText.color = Color.white;
+			statInfo.transform.parent = obj.transform;
+			statInfo.transform.localPosition = Vector2.zero;
+			statInfoText.text = player.GetStatByName(stat[i]).ToString();
+			statInfoText.fontSize = 50;
+			statInfoText.font = font;
+			statInfoText.alignment = TextAnchor.MiddleLeft;
+			RectTransform statInfoRT = statInfo.GetComponent<RectTransform>();
+			statInfoRT.sizeDelta = new Vector2(canvasWidth * 1f / 6f, 100f);
+			statInfoRT.localPosition = new Vector2(canvasWidth * 1f / 12f, 0f);
 
 			// get stat btn
 			GameObject getBtn = Instantiate(togglePrefab);
@@ -133,21 +153,37 @@ public class StatPanel : MonoBehaviour
 			getBtnRT.localPosition = Vector3.zero;
 			getBtn.transform.localPosition = secondElementPos;
 
+			Text getBtnLabel = getBtn.transform.GetChild(1).GetComponent<Text>();
+			ds = player.TryGetStat(stat[i]) - player.GetStatByName(stat[i]);
+			getBtnLabel.text = "+" + ds;
+
 			getBtn.GetComponent<Toggle>().group = getToggleParent;
 
-			// loss stat btn
-			GameObject lossBtn = Instantiate(togglePrefab);
-			lossBtn.name = "loss_" + stat[i];
-			lossBtn.transform.parent = obj.transform;
+			if (player.GetMinStatByName(stat[i]) < player.GetStatByName(stat[i])) // when player (min stat >= stat) then no show
+			{
+				// loss stat btn
+				GameObject lossBtn = Instantiate(togglePrefab);
+				lossBtn.name = "loss_" + stat[i];
+				lossBtn.transform.parent = obj.transform;
 
-			RectTransform lossBtnRT = lossBtn.GetComponent<RectTransform>();
-			lossBtnRT.localPosition = Vector3.zero;
-			lossBtnRT.anchorMin = anchor;
-			lossBtnRT.anchorMax = anchor;
-			lossBtnRT.pivot = anchor;
-			lossBtnRT.localPosition = thirdElementPos;
+				RectTransform lossBtnRT = lossBtn.GetComponent<RectTransform>();
+				lossBtnRT.localPosition = Vector3.zero;
+				lossBtnRT.anchorMin = anchor;
+				lossBtnRT.anchorMax = anchor;
+				lossBtnRT.pivot = anchor;
+				lossBtnRT.localPosition = thirdElementPos;
 
-			lossBtn.GetComponent<Toggle>().group = lossToggleParent;
+				Text lossBtnLabel = lossBtn.transform.GetChild(1).GetComponent<Text>();
+				ds = player.GetStatByName(stat[i]) - player.TryLossStat(stat[i]);
+				lossBtnLabel.text = "-" + ds;
+
+				lossBtn.GetComponent<Toggle>().group = lossToggleParent;
+
+			}
+			else
+			{
+				statText.text += " (can't loss)";
+			}
 		}
 		/// save btn
 		GameObject save = Instantiate(buttonPrefab);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MethodsForMap
+public class Methods
 {
 	public static bool IsWall(int r, int c, int row, int col)
 	{
@@ -13,6 +13,18 @@ public class MethodsForMap
 	{
 		if (x < min) return min;
 		if (max < x) return max;
+		return x;
+	}
+
+	public static int Min(int x, int y)
+	{
+		if (x < y) return x;
+		return y;
+	}
+
+	public static int Max(int x, int y)
+	{
+		if (x < y) return y;
 		return x;
 	}
 }
