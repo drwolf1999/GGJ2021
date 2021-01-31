@@ -348,6 +348,7 @@ MonoBehaviour:
   speed: 5
   playerCombat: {fileID: 194108960}
   soundManager: {fileID: 1836161596}
+  uiManager: {fileID: 549455847}
   atkName: playerAttack
   firePoint: {fileID: 849694944}
 --- !u!114 &194108960
@@ -923,6 +924,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 535b2d79c12af9e42802004979098782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  subMenu: {fileID: 1315203211}
+  statPanel: {fileID: 1322838074}
 --- !u!1 &555665974
 GameObject:
   m_ObjectHideFlags: 0
