@@ -39,6 +39,10 @@ public class EnemyRanged : MonoBehaviour
     {
         enemyCombat.Health = 10 + 10 * stageController.currentStage;
         enemyCombat.Attack = 25 + 10 * stageController.currentStage;
+        enemyCombat.Defense = 0 + 7 * stageController.currentStage;
+        enemyCombat.Penetration = 0 + 2 * stageController.currentStage;
+        enemyCombat.CriticalRate = 5 + 1 * stageController.currentStage;
+        enemyCombat.CriticalDamage = 50 + 2 * stageController.currentStage;
 
         isAwaken = true;
 
