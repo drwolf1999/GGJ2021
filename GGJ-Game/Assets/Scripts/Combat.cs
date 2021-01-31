@@ -5,6 +5,7 @@ using TMPro;
 
 public class Combat : MonoBehaviour
 {
+    public int MaxHealth { get; set; }
     public int Health { get; set; }
     public int Attack { get; set; }
     public int Defense { get; set; }

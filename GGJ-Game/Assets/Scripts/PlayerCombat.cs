@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerCombat : Combat
 {
-	private void Start()
+	private void Awake()
 	{
-		Health = 50;
+		MaxHealth = 200;
+		Health = MaxHealth;
 		Attack = 18;
 		Defense = 0;
 		MovementSpeed = 7;
@@ -47,7 +48,7 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				stat = Health;
+				stat = MaxHealth;
 				break;
 			case "Attack":
 				stat = Attack;
@@ -113,7 +114,7 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				r = Methods.Max(Health - 50, GetMinStatByName(name));
+				r = Methods.Max(MaxHealth - 50, GetMinStatByName(name));
 				break;
 			case "Attack":
 				r = Methods.Max(Attack - 5, GetMinStatByName(name));
@@ -145,7 +146,7 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				Health = TryLossStat(name);
+				MaxHealth = TryLossStat(name);
 				break;
 			case "Attack":
 				Attack = TryLossStat(name);
@@ -177,7 +178,7 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				r = Health + 50;
+				r = MaxHealth + 50;
 				break;
 			case "Attack":
 				r = Attack + 5;
@@ -209,7 +210,7 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				Health = TryGetStat(name);
+				MaxHealth = TryGetStat(name);
 				break;
 			case "Attack":
 				Attack = TryGetStat(name);
