@@ -75,7 +75,7 @@ public class StatPanel : MonoBehaviour
 		stageLabel.name = "loss label";
 		stageLabel.transform.parent = label.transform;
 		Text stageText = stageLabel.AddComponent<Text>();
-		stageText.text = "stage: " + stageController.currentStage;
+		stageText.text = "next stage: " + stageController.currentStage;
 		stageText.font = font;
 		stageText.fontSize = 40;
 		RectTransform stageRT = stageLabel.GetComponent<RectTransform>();
