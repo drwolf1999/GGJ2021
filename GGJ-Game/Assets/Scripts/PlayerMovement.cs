@@ -55,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void Update()
 	{
+		ApplyPlayerStats();
 		if (!uiManager.uiActive)
 		{
 			movement.x = Input.GetAxisRaw("Horizontal");

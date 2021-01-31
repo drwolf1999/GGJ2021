@@ -129,10 +129,10 @@ public class PlayerCombat : Combat
 				r = Methods.Max(MaxHealth - 50, GetMinStatByName(name));
 				break;
 			case "Attack":
-				r = Methods.Max(Attack - 15, GetMinStatByName(name));
+				r = Methods.Max(Attack - 5, GetMinStatByName(name));
 				break;
 			case "Defense":
-				r = Methods.Max(Defense - 30, GetMinStatByName(name));
+				r = Methods.Max(Defense - 15, GetMinStatByName(name));
 				break;
 			case "MovementSpeed":
 				r = Methods.Max(MovementSpeed - 1, GetMinStatByName(name));
@@ -147,7 +147,7 @@ public class PlayerCombat : Combat
 				r = Methods.Max(CriticalDamage - 10, GetMinStatByName(name));
 				break;
 			case "Penetration":
-				r = Methods.Max(Penetration - 1, GetMinStatByName(name));
+				r = Methods.Max(Penetration - 3, GetMinStatByName(name));
 				break;
 		}
 		return r;
@@ -190,28 +190,28 @@ public class PlayerCombat : Combat
 		switch (name)
 		{
 			case "Health":
-				r = MaxHealth + 50;
+				r = MaxHealth + 70;
 				break;
 			case "Attack":
-				r = Attack + 15;
+				r = Attack + 7;
 				break;
 			case "Defense":
-				r = Defense + 30;
+				r = Defense + 20;
 				break;
 			case "MovementSpeed":
 				r = MovementSpeed + 1;
 				break;
 			case "AttackSpeed":
-				r = AttackSpeed + 50;
+				r = AttackSpeed + 70;
 				break;
 			case "CriticalRate":
-				r = CriticalRate + 5;
+				r = CriticalRate + 7;
 				break;
 			case "CriticalDamage":
-				r = CriticalDamage + 10;
+				r = CriticalDamage + 14;
 				break;
 			case "Penetration":
-				r = Penetration + 1;
+				r = Penetration + 5;
 				break;
 		}
 		return r;
