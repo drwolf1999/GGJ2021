@@ -31,7 +31,17 @@ public class PlayerCombat : Combat
 		}
 	}
 
-	public int GetStatByName(string name)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "EnemyMelee")
+        {
+			Combat enemyCombat = collision.gameObject.GetComponent<Combat>();
+			GetDamage(enemyCombat);
+			collision.gameObject.GetComponent<EnemyMelee>().SwitchCollider();
+		}
+    }
+
+    public int GetStatByName(string name)
 	{
 		int stat = -1;
 		switch (name)

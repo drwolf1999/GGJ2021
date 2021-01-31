@@ -49,14 +49,29 @@ public class Combat : MonoBehaviour
         tmp.text = ((int)dmg).ToString();
         if (isCrit)
         {
-            tmp.fontSize = 5;
-            tmp.faceColor = new Color(212, 1, 0);
+            tmp.fontSize = 6;
+            if(gameObject.tag == "Player")
+            {
+                //tmp.faceColor = new Color32(1, 212, 0);
+                tmp.faceColor = new Color32(255, 0, 0, 255);
+            }
+            else
+            {
+                tmp.faceColor = new Color32(255, 192, 203, 255);
+            }
             soundManager.playSoundEffect(damageName);
         }
         else
         {
             tmp.fontSize = 3;
-            tmp.faceColor = new Color(212, 125, 0);
+            if (gameObject.tag == "Player")
+            {
+                tmp.faceColor = new Color32(255, 0, 0, 255);
+            }
+            else
+            {
+                tmp.faceColor = new Color32(255, 255, 0, 255);
+            }
         }
 
     }

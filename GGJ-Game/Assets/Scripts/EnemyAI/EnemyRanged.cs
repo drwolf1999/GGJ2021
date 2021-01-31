@@ -5,14 +5,15 @@ using UnityEngine;
 public class EnemyRanged : MonoBehaviour
 {
     [SerializeField] Transform playerTransform;
-    [SerializeField] Transform shootPos;
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] List<Transform> firePoints;
+    [SerializeField] Transform spriteTransform;
 
     public bool isAwaken = false;
 
     public string bulletTag = "";
 
-    public float rotateSpeed;
+    public float rotateSpeed = 500f;
 
     private float timer;
     private float waitingTime;
@@ -42,7 +43,7 @@ public class EnemyRanged : MonoBehaviour
     {
         if(isAwaken)
         {
-            LookAtPlayer();
+            //Spin();
             timer += Time.deltaTime;
             if (timer > waitingTime)
             {
@@ -71,29 +72,27 @@ public class EnemyRanged : MonoBehaviour
 
     private void Attack()
     {
-        GameObject bullet = objectPooler.SpawnFromPool(bulletTag, shootPos.position, shootPos.rotation);
-        bullet.GetComponent<EnemyBulletMove>().SetCombatStats(enemyCombat);
+        for (int i = 0; i < 8; ++i)
+        {
+            //Vector3 dir = (firePoints[i].position - this.transform.position).normalized;
+            GameObject bullet = objectPooler.SpawnFromPool(bulletTag, firePoints[i].position, firePoints[i].rotation);
+            bullet.GetComponent<EnemyBulletMove>().SetCombatStats(enemyCombat);
+            //rotation.z += 45;
+        }
 
         //Put Animation
     }
 
-    private void LookAtPlayer()
-    {
-        //transform.up = playerTransform.position - transform.position;
+    //private void Spin()
+    //{
+    //    //transform.Rotate(0, 0, rotateSpeed);
+    //    //rb.AddTorque(rotateSpeed);
 
-        //transform.LookAt(playerTransform.position);
-
-        //Vector2 relativePos = playerTransform.position - transform.position;
-        Vector2 direction = new Vector2(
-                transform.position.x - playerTransform.position.x,
-                transform.position.y - playerTransform.position.y
-            );
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Quaternion angleAxis = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
-        Quaternion rotation = Quaternion.Slerp(transform.rotation, angleAxis, rotateSpeed * Time.deltaTime);
-        transform.rotation = rotation;
-        Debug.Log(transform.position);
-    }
+    //    spriteTransform.Rotate(0, 0, rotateSpeed);
+    //    Quaternion newRotation = spriteTransform.rotation;
+    //    newRotation.z += rotateSpeed*Time.deltaTime;
+    //    spriteTransform.rotation = newRotation;
+    //}
 
     public void AwakeEnemy()
     {
