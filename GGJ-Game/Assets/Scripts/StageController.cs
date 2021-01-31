@@ -61,11 +61,7 @@ public class StageController : MonoBehaviour
 
 	public void ResetAll()
 	{
-		player.gameObject.SetActive(true);
-		player.Health = player.MaxHealth;
-		LoadComponent();
-		currentStage = 0;
-		GoNextStage();
+		UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
 	}
 
 	private void ResetArray()

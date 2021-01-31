@@ -30,6 +30,16 @@ public class RoomDesign : MonoBehaviour
 				if (!available[r][c]) continue;
 				if (Random.Range(1, 20 * 16) > 4) continue;
 				GameObject e = Instantiate(enemy[Random.Range(0, enemy.Length)], position + new Vector2(c, row - 1 - r), Quaternion.identity);
+				EnemyMelee enemyMelee = e.GetComponent<EnemyMelee>();
+				if (enemyMelee == null)
+				{
+					EnemyRanged enemyRanged = e.GetComponent<EnemyRanged>();
+					enemyRanged.InitialSetting();
+				}
+				else
+				{
+					enemyMelee.InitialSetting();
+				}
 				e.transform.parent = eParent;
 			}
 		}
